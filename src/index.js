@@ -5,6 +5,7 @@ const get = require('lodash.get');
 const omit = require('lodash.omit');
 const set = require('lodash.set');
 const traverse = require('traverse');
+const sanitizeHtml = require('sanitize-html');
 
 const { js2xml } = require('xml-js');
 const {
