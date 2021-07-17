@@ -1,3 +1,5 @@
+const omitBy = require('lodash.omitby')
+
 const XML2JSON_OPTIONS = {
   compact: false,
   alwaysArray: true,
