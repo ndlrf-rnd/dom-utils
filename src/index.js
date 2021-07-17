@@ -1,20 +1,17 @@
-const traverse = require('traverse');
-const omit = require('lodash.omit');
+const Typograf = require('typograf');
 const cloneDeep = require('lodash.clonedeep');
+const fs = require('fs');
 const get = require('lodash.get');
+const omit = require('lodash.omit');
 const set = require('lodash.set');
+const traverse = require('traverse');
+
 const { js2xml } = require('xml-js');
-
-const XML2JSON_OPTIONS = {
-  compact: false,
-  alwaysArray: true,
-  alwaysChildren: true,
-  trim: true,
-  indentText: true,
-  spaces: '  ',
-};
-
-const UNIQ_ATTRIBUTES_RE = /^([a-z0-9_-]*:)?id|src|href|cite|url|id|epub:type|type|alt|width|height$/uig;
+const {
+  UNIQ_ATTRIBUTES_RE,
+  EXTERNAL_SANITIZER_PACKAGE_CONFIG,
+  XML2JSON_OPTIONS,
+} = require('./constants');
 
 const forceArray = (x) => (
   Array.isArray(x) ? x : [x].filter((v) => !!v)
@@ -271,19 +268,48 @@ const cutElements = (someRoot) => forceArray(
   [],
 ).filter((x) => !!x);
 
+const runThirdPartySanitizer = (black) => sanitizeHtml(
+  black,
+  EXTERNAL_SANITIZER_PACKAGE_CONFIG,
+);
+
+const loadAndSanitize = (uriOrPath) => {
+  const f = fs.readFileSync(uriOrPath, 'utf-8');
+  const notSectionedContent = recursiveAlignIds(
+    JSON.parse(xml2json(
+      runThirdPartySanitizer(f),
+      XML2JSON_OPTIONS,
+    )),
+    uriOrPath,
+  );
+  // FIXME: Dont generate trash records
+  return cutElements(notSectionedContent);
+};
+
+const typHtml = (htmlTxt, typografOptions) => {
+  const typograf = new Typograf(typografOptions.global);
+  typografOptions.rules.forEach((rule) => {
+    typograf.setSetting(...rule);
+  });
+  return typograf
+    .execute(htmlTxt)
+    .replace(/<(br|nobr|img|video|audio)([^>]*[^/>]|)>/ug, '<$1 $2 />');
+};
+
 module.exports = {
-  toElementsPath,
   bodyReducer,
+  cutElements,
+  extendClass,
+  findNumbers,
+  forceArray,
   getBody,
   getHead,
   getHeaderLevel,
-  isHeaderEl,
-  extendClass,
   hasContent,
+  isHeaderEl,
   isToc,
+  loadAndSanitize,
   parseHeaderLevel,
-  findNumbers,
-  forceArray,
-  cutElements,
-  UNIQ_ATTRIBUTES_RE,
+  toElementsPath,
+  typHtml,
 };

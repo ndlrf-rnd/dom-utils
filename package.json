@@ -1,9 +1,14 @@
 {
   "name": "@ndlrf/dom-utils",
-  "version": "1.0.3",
+  "version": "1.2.0",
   "description": "Common DOM manipulation routines",
   "tags": [
-    "DOM", "document", "element3", "node", "sanitize", "cut"
+    "DOM",
+    "document",
+    "element3",
+    "node",
+    "sanitize",
+    "cut"
   ],
   "license": "Apache-2.0",
   "author": {
@@ -25,19 +30,23 @@
   "main": "src/index.js",
   "man": "README.md",
   "dependencies": {
+    "lodash.clonedeep": "4.5.0",
     "lodash.get": "4.4.2",
+    "lodash.omit": "4.5.0",
     "lodash.set": "4.3.2",
     "traverse": "0.6.6",
-    "lodash.omit": "4.5.0",
-    "lodash.clonedeep": "4.5.0"
+    "typograf": "6.12.1",
+    "xml-js": "1.6.11"
   },
   "files": [
-    "dist/", "lib/", "src/", "!__mocks__"
+    "src/",
+    "README.md",
+    "LICENSE"
   ],
   "devDependencies": {
     "eslint": "7.30.0",
     "eslint-plugin-jest": "24.3.6",
-    "jest": "26.6.3"
+    "jest": "27.0.6"
   },
   "scripts": {
     "ci": "npm run test && npm run lint`",
