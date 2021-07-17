@@ -310,6 +310,7 @@ module.exports = {
   isToc,
   loadAndSanitize,
   parseHeaderLevel,
+  runThirdPartySanitizer,
   toElementsPath,
   typHtml,
 };

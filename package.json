@@ -1,6 +1,6 @@
 {
   "name": "@ndlrf/dom-utils",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Common DOM manipulation routines",
   "tags": [
     "DOM",
